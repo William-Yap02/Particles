@@ -21,8 +21,35 @@ void Engine::run()
 	    update(float dtAsSeconds);
 	    draw();
     }
-
-
-
-
 }
+ void Engine::input()
+{
+     while (m_Window.isOpen())
+    {   
+    Event event;
+    while (m_Window.pollEvent(event))
+	    {
+            if (event.type == Event::Closed)
+            {
+        // Quit the program when the window is closed
+				m_Window.close();
+            }
+            else if (event.type == Event::MouseButtonPressed)
+            {
+                if (event.mouseButton.button == Mouse::Left)
+                {
+                    for (int i=0;i<5;i++)
+                    {
+                        Particle particle; 
+                        int max = 50;
+                        int min = 25;
+                        int range = max - min + 1;
+                        int numPoints = rand() % range + min;
+                        Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition);
+                    }
+                }
+            }
+
+        }
+    }
+ }
