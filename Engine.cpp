@@ -31,7 +31,7 @@ void Engine::run()
 	    {
             if (event.type == Event::Closed)
             {
-        // Quit the program when the window is closed
+        // Qut the program when the window is closed
 				m_Window.close();
             }
             else if (event.type == Event::MouseButtonPressed)
@@ -48,7 +48,7 @@ void Engine::run()
                         Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition);
                     }
                 }
-            }
+            }i
 
         }
     }
