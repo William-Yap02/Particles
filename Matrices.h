@@ -230,8 +230,23 @@ namespace Matrices
     {
         Matrix::Matrix(2, nCols);
 
-        
-    }
+        for (int i = 0; i < 2; i++)
+        {
+            if (i = 0)
+            {
+                for (int j = 0; j < nCols; j++)
+                {
+                    a(i, j) = xShift;
+                }
+            }
+            else if (i = 1)
+            {
+                for (int k = 0; k < nCols; k++)
+                {
+                    a(i, k) = yShift;
+                }
+            }
+        }
 }
 
 #endif // MATRIX_H_INCLUDED
