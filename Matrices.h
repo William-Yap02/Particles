@@ -174,6 +174,16 @@ namespace Matrices
             RotationMatrix(double theta);
     };
 
+    RotationMatrix::RotationMatrix(double theta)
+    {
+        Matrix::Matrix(2, 2);
+
+        a(0, 0) = cos(theta);
+        a(0, 1) = -sin(theta);
+        a(1, 0) = sin(theta);
+        a(1, 1) = cos(theta);
+    }
+
     ///2D scaling matrix
     ///usage:  A = S * A expands or contracts A by the specified scaling factor
     class ScalingMatrix : public Matrix
