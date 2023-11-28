@@ -14,7 +14,7 @@ void Engine::run()
     Particle p(m_Window, 4, { (int)m_Window.getSize().x / 2, (int)m_Window.getSize().y / 2 });
     p.unitTests();
     cout << "Unit tests complete.  Starting engine..." << endl;
-    while (m_Window.open())
+    while (m_Window.isOpen()) //while window is open run private members
     {
         clock.restart();
         input();
