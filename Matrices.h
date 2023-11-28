@@ -199,6 +199,16 @@ namespace Matrices
             ScalingMatrix(double scale);
     };
 
+    ScalingMatrix::ScalingMatrix(double scale)
+    {
+        Matrix::Matrix(2, 2);
+
+        a(0, 0) = scale;
+        a(0, 1) = 0;
+        a(1, 0) = 0;
+        a(1, 1) = scale;
+    }
+
     ///2D Translation matrix
     ///usage:  A = T + A will shift all coordinates of A by (xShift, yShift)
     class TranslationMatrix : public Matrix
@@ -215,6 +225,13 @@ namespace Matrices
             ///where each column contains one (x,y) coordinate pair
             TranslationMatrix(double xShift, double yShift, int nCols);
     };
+
+    TranslationMatrix::TranslationMatrix(double xShift, double yShift, int nCols)
+    {
+        Matrix::Matrix(2, nCols);
+
+        
+    }
 }
 
 #endif // MATRIX_H_INCLUDED
