@@ -1,7 +1,5 @@
 #include "Particle.h"
 
-
-
 Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition)
 {
     Particle(Matrix m_A) : m_A(2, numPoints) {}
@@ -9,8 +7,26 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     m_numPoints =  numPoints;
     m_radiansPerSec = ((float)rand()/(RAND_MAX)) * PI;
     m_cartesianPlane.setCenter(0,0);
-    m_cartesianPlane.setSize(target.getSize().x, (-1.0)*target.getSize().y)
+    m_cartesianPlane.setSize(target.getSize().x, (-1.0)*target.getSize().y);
     m_centerCoordinate = mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
+}
+
+Particle::draw(RenderTarget& target, RenderStates states) const
+{
+    VertexArray lines(TriangleFan, m_numPoints + 1);
+
+    Vector2f center = mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane);
+
+    lines[0].position = center;
+    lines[0].color = m_color;
+
+    for (int j = 0; j <= m_numPoints; j++)
+    {
+        lines[j].position = mapCoordsToPixel(m_A(j - 1), m_cartesianPlane);
+        lines[j].color = m_color2;
+    }
+
+    target.draw(lines);
 }
 
 bool Particle::almostEqual(double a, double b, double eps)
