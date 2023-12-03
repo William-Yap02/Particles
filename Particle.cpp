@@ -1,22 +1,39 @@
 #include "Particle.h"
 
-Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition)
+Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition): m_A(2, numPoints)
 {
-    Particle(Matrix m_A) : m_A(2, numPoints) {}
     m_ttl = TTL;
     m_numPoints =  numPoints;
-    m_radiansPerSec = ((float)rand()/(RAND_MAX)) * PI;
-    m_cartesianPlane.setCenter(0,0);
-    m_cartesianPlane.setSize(target.getSize().x, (-1.0)*target.getSize().y);
-    m_centerCoordinate = mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
+
+    m_radiansPerSec = ((float)rand()/(RAND_MAX)) * M_PI;
+    setCenter(0,0);
+    setSize(target.getSize().x, (-1.0)*target.getSize().y);
+    m_centerCoordinate = m_cartesianPlane.mapPixelToCoords(mouseClickPosition);
+
     int max = 500;
     int min = 100;
     int range = max - min + 1;
     int m_vx= rand() % range + min;
     int m_vy= rand() % range + min;
+
     m_color1 = Color::White;
     m_color2 =  Color::Red;
 
+    float theta = ((float)rand() / RAND_MAX) * M_PI / 2;
+    float dTheta = 2 * M_PI / (numPoints - 1);
+
+    for (int j = 0; j < numPoints; j++)
+    {
+        float r = rand() % 61 + 20;
+
+        float dx = r * cos(theta);
+        float dy = r * sin(theta);
+
+        m_A(0, j) = m_centerCoordinate.x + dx;
+        m_A(1, j) = m_centerCoordinate.y + dy;
+
+        theta += dTheta;
+    }
 }
 
 Particle::draw(RenderTarget& target, RenderStates states) const
