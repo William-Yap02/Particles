@@ -5,7 +5,7 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     m_ttl = TTL;
     m_numPoints =  numPoints;
 
-    m_radiansPerSec = ((float)rand()/(RAND_MAX)) * M_PI;
+    m_radiansPerSec = ((float)rand()/(RAND_MAX)) * PI;
     setCenter(0,0);
     setSize(target.getSize().x, (-1.0)*target.getSize().y);
     m_centerCoordinate = m_cartesianPlane.mapPixelToCoords(mouseClickPosition);
@@ -19,8 +19,8 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     m_color1 = Color::White;
     m_color2 =  Color::Red;
 
-    float theta = ((float)rand() / RAND_MAX) * M_PI / 2;
-    float dTheta = 2 * M_PI / (numPoints - 1);
+    float theta = ((float)rand() / RAND_MAX) * PI / 2;
+    float dTheta = 2 * PI / (numPoints - 1);
 
     for (int j = 0; j < numPoints; j++)
     {
@@ -104,8 +104,8 @@ void Particle::unitTests()
     int score = 0;
 
     cout << "Testing RotationMatrix constructor...";
-    double theta = M_PI / 4.0;
-    RotationMatrix r(M_PI / 4);
+    double theta = PI / 4.0;
+    RotationMatrix r(PI / 4);
     if (r.getRows() == 2 && r.getCols() == 2 && almostEqual(r(0, 0), cos(theta))
         && almostEqual(r(0, 1), -sin(theta))
         && almostEqual(r(1, 0), sin(theta))
@@ -168,7 +168,7 @@ void Particle::unitTests()
 
     cout << "Applying one rotation of 90 degrees about the origin..." << endl;
     Matrix initialCoords = m_A;
-    rotate(M_PI / 2.0);
+    rotate(PI / 2.0);
     bool rotationPassed = true;
     for (int j = 0; j < initialCoords.getCols(); j++)
     {

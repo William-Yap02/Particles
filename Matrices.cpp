@@ -104,46 +104,28 @@ namespace Matrices
         return os;
     } 
 
-    RotationMatrix::RotationMatrix(double theta)
+    RotationMatrix::RotationMatrix(double theta) : Matrix(2, 2)
     {
-        Matrix::Matrix(2, 2);
-
-        a(0, 0) = cos(theta);
-        a(0, 1) = -sin(theta);
-        a(1, 0) = sin(theta);
-        a(1, 1) = cos(theta);
+        (*this)(0, 0) = cos(theta);
+        (*this)(0, 1) = -sin(theta);
+        (*this)(1, 0) = sin(theta);
+        (*this)(1, 1) = cos(theta);
     }
 
-    ScalingMatrix::ScalingMatrix(double scale)
+    ScalingMatrix::ScalingMatrix(double scale) : Matrix(2, 2)
     {
-        Matrix::Matrix(2, 2);
-
-        a(0, 0) = scale;
-        a(0, 1) = 0;
-        a(1, 0) = 0;
-        a(1, 1) = scale;
+        (*this)(0, 0) = scale;
+        (*this)(0, 1) = 0;
+        (*this)(1, 0) = 0;
+        (*this)(1, 1) = scale;
     }
 
-    TranslationMatrix::TranslationMatrix(double xShift, double yShift, int nCols)
+    TranslationMatrix::TranslationMatrix(double xShift, double yShift, int nCols) : Matrix(2, nCols)
     {
-        Matrix::Matrix(2, nCols);
-
-        for (int i = 0; i < 2; i++)
+        for (int j = 0; j < nCols; j++)
         {
-            if (i = 0)
-            {
-                for (int j = 0; j < nCols; j++)
-                {
-                    a(i, j) = xShift;
-                }
-            }
-            else if (i = 1)
-            {
-                for (int k = 0; k < nCols; k++)
-                {
-                    a(i, k) = yShift;
-                }
-            }
+            (*this)(0, j) = xShift;
+            (*this)(1, j) = yShift;
         }
     }
 }

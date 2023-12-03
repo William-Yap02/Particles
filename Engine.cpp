@@ -2,11 +2,9 @@
 
 Engine::Engine()
 {
-    int desktopWidth = VideoMode::getDesktopMode().width;
-    int desktopHeight = VideoMode::getDesktopMode().height;
-    m_Window.create(VideoMode(desktopWidth, desktopHeight), "Particles", Style::Default);
-
+    m_Window.create(VideoMode::getDesktopMode(), "Particles", Style::Default);
 }
+
 void Engine::run()
 {
     Clock clock; //Construct a local Clock object to track time per frame
@@ -16,40 +14,74 @@ void Engine::run()
     cout << "Unit tests complete.  Starting engine..." << endl;
     while (m_Window.isOpen()) //while window is open run private members
     {
-        clock.restart();
+        Time time = clock.restart();
+        float timeSeconds = time.asSeconds();
         input();
-	    update(float dtAsSeconds);
+	    update(timeSeconds);
 	    draw();
     }
 }
- void Engine::input()
-{
-     while (m_Window.isOpen())
-    {   
+
+void Engine::input()
+{ 
     Event event;
     while (m_Window.pollEvent(event))
-	    {
-            if (event.type == Event::Closed)
+	{
+        if (event.type == Event::Closed)
+        {
+            // Qut the program when the window is closed
+			m_Window.close();
+        }
+        else if (Event::KeyPressed)
+        {
+            if (event.key.code == Keyboard::Escape)
             {
-        // Qut the program when the window is closed
-				m_Window.close();
+                m_Window.close();
             }
-            else if (event.type == Event::MouseButtonPressed)
+        }
+        else if (event.type == Event::MouseButtonPressed)
+        {
+            if (event.mouseButton.button == Mouse::Left)
             {
-                if (event.mouseButton.button == Mouse::Left)
+                for (int i = 0; i < 5; i++)
                 {
-                    for (int i=0;i<5;i++)
-                    {
-                        Particle particle; 
-                        int max = 50;
-                        int min = 25;
-                        int range = max - min + 1;
-                        int numPoints = rand() % range + min;
-                        Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition);
-                    }
+                    int max = 50;
+                    int min = 25;
+                    int range = max - min + 1;
+                    int numPoints = rand() % range + min;
+                    Vector2i mousePosition = Mouse::getPosition(m_Window);
+                    Particle particle(m_Window, numPoints, mousePosition);
+                    m_particles.push_back(particle);
                 }
-            }i
-
+            }
         }
     }
- }
+}
+
+void Engine::update(float dtAsSeconds)
+{
+    for (auto iter = m_particles.begin(); iter != m_particles.end(); )
+    {
+        if (iter->getTTL() > 0.0)
+        {
+            iter->update(dtAsSeconds);
+            iter++;
+        }
+        else 
+        {
+            iter = m_particles.erase(iter);
+        }
+    }
+}
+
+void Engine::draw()
+{
+    m_Window.clear();
+
+    for (auto& particle : m_particles)
+    {
+        m_Window.draw(particle);
+    }
+
+    m_Window.display();
+}
