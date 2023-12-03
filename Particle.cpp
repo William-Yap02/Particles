@@ -6,9 +6,9 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     m_numPoints =  numPoints;
 
     m_radiansPerSec = ((float)rand()/(RAND_MAX)) * PI;
-    setCenter(0,0);
-    setSize(target.getSize().x, (-1.0)*target.getSize().y);
-    m_centerCoordinate = m_cartesianPlane.mapPixelToCoords(mouseClickPosition);
+    m_cartesianPlane.setCenter(0,0);
+    m_cartesianPlane.setSize(target.getSize().x, (-1.0)*target.getSize().y);
+    m_centerCoordinate = target.mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
 
     int max = 500;
     int min = 100;
@@ -36,22 +36,24 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     }
 }
 
-Particle::draw(RenderTarget& target, RenderStates states) const
+void Particle::draw(RenderTarget& target, RenderStates states) const
 {
     VertexArray lines(TriangleFan, m_numPoints + 1);
 
-    Vector2f center = target.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane);
+    Vector2f center = Vector2f(target.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane));
 
     lines[0].position = center;
-    lines[0].color = m_color;
+    lines[0].color = m_color1;
 
     for (int j = 1; j <= m_numPoints; j++)
     {
-        lines[j].position = target.mapCoordsToPixel(Vector2f(m_A(0, j - 1), m_A(1, j - 1)), m_cartesianPlane);
+        Vector2f pixelPosition = Vector2f(target.mapCoordsToPixel(Vector2f(m_A(0, j - 1), m_A(1, j - 1)), m_cartesianPlane));
+
+        lines[j].position = pixelPosition;
         lines[j].color = m_color2;
     }
 
-    target.draw(lines);
+    target.draw(lines, states);
 }
 
 void Particle::update(float dt)
@@ -68,7 +70,7 @@ void Particle::update(float dt)
 
 void Particle::translate(double xShift, double yShift)
 {
-    TranslationMatrix T(xShift, yShift);
+    TranslationMatrix T(xShift, yShift, m_numPoints);
     m_A = T + m_A;
     m_centerCoordinate.x += xShift;
     m_centerCoordinate.y += yShift;
