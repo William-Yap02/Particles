@@ -32,7 +32,7 @@ void Engine::input()
             // Qut the program when the window is closed
 			m_Window.close();
         }
-        else if (Event::KeyPressed)
+        else if (event.type == Event::KeyPressed)
         {
             if (event.key.code == Keyboard::Escape)
             {
@@ -60,16 +60,16 @@ void Engine::input()
 
 void Engine::update(float dtAsSeconds)
 {
-    for (auto iter = m_particles.begin(); iter != m_particles.end(); )
+    for (int i = 0; i < m_particles.size(); )
     {
-        if (iter->getTTL() > 0.0)
+        if (m_particles[i].getTTL() > 0.0)
         {
-            iter->update(dtAsSeconds);
-            iter++;
+            m_particles[i].update(dtAsSeconds);
+            i++;
         }
         else 
         {
-            iter = m_particles.erase(iter);
+            m_particles.erase(m_particles.begin() + i);
         }
     }
 }
@@ -78,7 +78,7 @@ void Engine::draw()
 {
     m_Window.clear();
 
-    for (auto& particle : m_particles)
+    for (Particle particle : m_particles)
     {
         m_Window.draw(particle);
     }
