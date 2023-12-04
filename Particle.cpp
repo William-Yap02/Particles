@@ -9,12 +9,14 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     m_cartesianPlane.setCenter(0,0);
     m_cartesianPlane.setSize(target.getSize().x, (-1.0)*target.getSize().y);
     m_centerCoordinate = target.mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
+    m_centerCoordinate.x = round(m_centerCoordinate.x);
+    m_centerCoordinate.y = round(m_centerCoordinate.y);
 
     int max = 500;
     int min = 100;
     int range = max - min + 1;
-    int m_vx= rand() % range + min;
-    int m_vy= rand() % range + min;
+    m_vx= rand() % range + min;
+    m_vy= rand() % range + min;
 
     m_color1 = Color::White;
     m_color2 =  Color::Red;
@@ -53,7 +55,7 @@ void Particle::draw(RenderTarget& target, RenderStates states) const
         lines[j].color = m_color2;
     }
 
-    target.draw(lines, states);
+    target.draw(lines);
 }
 
 void Particle::update(float dt)
